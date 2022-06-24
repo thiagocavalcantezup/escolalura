@@ -1,5 +1,7 @@
 package br.com.alura.escolalura.controllers;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +28,15 @@ public class AlunoController {
 
     @PostMapping("/alunos")
     public String criar(@ModelAttribute Aluno aluno) {
-        System.out.println("Aluno para salvar: " + aluno);
         alunoRepository.salvar(aluno);
         return "redirect:/";
+    }
+
+    @GetMapping("/alunos")
+    public String listar(Model model) {
+        List<Aluno> alunos = alunoRepository.encontrarTodos();
+        model.addAttribute("alunos", alunos);
+        return "aluno/listar";
     }
 
 }
