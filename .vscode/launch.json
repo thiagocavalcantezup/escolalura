@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-EscolaluraApplication<escolalura>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "br.com.alura.escolalura.EscolaluraApplication",
+      "projectName": "escolalura",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
