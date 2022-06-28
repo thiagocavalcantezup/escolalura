@@ -1,5 +1,7 @@
 package br.com.alura.escolalura.controllers;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +69,12 @@ public class AlunoController {
         }
 
         return "aluno/pesquisar-nota";
+    }
+
+    @GetMapping("/alunos/pesquisar-geolocalizacao")
+    public String pesquisarGeolocalizacao(Model model) {
+        model.addAttribute("alunosProximos", new ArrayList<>());
+        return "aluno/pesquisar-geolocalizacao";
     }
 
 }
