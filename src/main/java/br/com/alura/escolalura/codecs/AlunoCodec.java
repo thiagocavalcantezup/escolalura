@@ -17,6 +17,7 @@ import org.bson.codecs.EncoderContext;
 import org.bson.types.ObjectId;
 
 import br.com.alura.escolalura.models.Aluno;
+import br.com.alura.escolalura.models.Contato;
 import br.com.alura.escolalura.models.Curso;
 import br.com.alura.escolalura.models.Habilidade;
 import br.com.alura.escolalura.models.Nota;
@@ -56,6 +57,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
         Curso curso = aluno.getCurso();
         List<Habilidade> habilidades = aluno.getHabilidades();
         List<Nota> notas = aluno.getNotas();
+        Contato contato = aluno.getContato();
 
         Document document = new Document();
 
@@ -78,6 +80,13 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
             notasDocument.add(nota.getValor());
         }
         document.put("notas", notasDocument);
+
+        document.put(
+            "contato",
+            new Document().append("endereco", contato.getEndereco())
+                          .append("coordinates", contato.getCoordinates())
+                          .append("type", contato.getType())
+        );
 
         codec.encode(writer, document, context);
     }
@@ -103,8 +112,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
 
         Document curso = document.get("curso", Document.class);
         if (curso != null) {
-            String nomeCurso = curso.getString("nome");
-            aluno.setCurso(new Curso(nomeCurso));
+            aluno.setCurso(new Curso(curso.getString("nome")));
         }
 
         List<Document> habilidadesDocument = document.getList(
@@ -126,6 +134,16 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
             notas.add(new Nota(notaDocument));
         }
         aluno.setNotas(notas);
+
+        Document contato = document.get("contato", Document.class);
+        if (contato != null) {
+            aluno.setContato(
+                new Contato(
+                    contato.getString("endereco"),
+                    contato.getList("coordinates", Double.class, new ArrayList<>())
+                )
+            );
+        }
 
         return aluno;
     }
