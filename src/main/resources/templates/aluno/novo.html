@@ -11,7 +11,7 @@
     <title>Escolalura</title>
     <script type="text/javascript"
             src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/googlemaps.js}"></script>
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
   </head>
 
   <body class="grey lighten-3">
@@ -62,8 +62,8 @@
 
     <script type="text/javascript"
             th:src="@{/materialize/js/materialize.min.js}"></script>
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOdplkllfJTzoC37shReWBSDW3xKKR8UI&amp;libraries=places&amp;callback=autoComplete"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOdplkllfJTzoC37shReWBSDW3xKKR8UI&amp;libraries=places&amp;callback=initAutocomplete&amp;solution_channel=GMP_QB_addressselection_v1_cA"
+            async="async" defer="defer"></script>
   </body>
 
 </html>
