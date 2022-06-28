@@ -32,7 +32,7 @@
                     th:text="${#temporals.format(aluno.dataNascimento, 'dd/MM/yyyy')}"></span>
             </td>
             <td style="text-align: center;">
-              <a th:href="@{'/alunos/#'}" title="Visualizar">
+              <a th:href="@{'/alunos/' + ${aluno.id}}" title="Visualizar">
                 <i class="tiny material-icons ">perm_contact_calendar</i>
               </a>
               <a th:href="@{'/alunos/' + ${aluno.id} + '/habilidades/nova/'}"

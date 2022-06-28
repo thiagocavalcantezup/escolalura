@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.alura.escolalura.models.Aluno;
@@ -37,6 +38,12 @@ public class AlunoController {
         List<Aluno> alunos = alunoRepository.encontrarTodos();
         model.addAttribute("alunos", alunos);
         return "aluno/listar";
+    }
+
+    @GetMapping("/alunos/{id}")
+    public String visualizar(@PathVariable String id, Model model) {
+        model.addAttribute("aluno", alunoRepository.encontrarPorId(id));
+        return "aluno/visualizar";
     }
 
 }
