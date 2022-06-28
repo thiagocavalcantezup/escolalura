@@ -1,6 +1,7 @@
 package br.com.alura.escolalura.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -15,8 +16,8 @@ public class Aluno {
     private LocalDate dataNascimento;
 
     private Curso curso;
-    private List<Nota> notas;
-    private List<Habilidade> habilidades;
+    private List<Nota> notas = new ArrayList<>();
+    private List<Habilidade> habilidades = new ArrayList<>();
 
     public ObjectId getId() {
         return id;
@@ -69,6 +70,10 @@ public class Aluno {
     public Aluno criarId() {
         setId(new ObjectId());
         return this;
+    }
+
+    public void adicionar(Habilidade habilidade) {
+        this.habilidades.add(habilidade);
     }
 
 }

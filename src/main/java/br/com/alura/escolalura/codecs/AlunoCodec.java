@@ -2,6 +2,8 @@ package br.com.alura.escolalura.codecs;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.BsonReader;
 import org.bson.BsonString;
@@ -16,6 +18,7 @@ import org.bson.types.ObjectId;
 
 import br.com.alura.escolalura.models.Aluno;
 import br.com.alura.escolalura.models.Curso;
+import br.com.alura.escolalura.models.Habilidade;
 
 public class AlunoCodec implements CollectibleCodec<Aluno> {
 
@@ -50,6 +53,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
         String nome = aluno.getNome();
         LocalDate dataNascimento = aluno.getDataNascimento();
         Curso curso = aluno.getCurso();
+        List<Habilidade> habilidades = aluno.getHabilidades();
 
         Document document = new Document();
 
@@ -57,6 +61,15 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
         document.put("nome", nome);
         document.put("data_nascimento", dataNascimento);
         document.put("curso", new Document().append("nome", curso.getNome()));
+
+        List<Document> habilidadesDocument = new ArrayList<>();
+        for (Habilidade habilidade : habilidades) {
+            habilidadesDocument.add(
+                new Document().append("nome", habilidade.getNome())
+                              .append("nivel", habilidade.getNivel())
+            );
+        }
+        document.put("habilidades", habilidadesDocument);
 
         codec.encode(writer, document, context);
     }
@@ -80,11 +93,24 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
                     .toLocalDate()
         );
 
-        Document curso = (Document) document.get("curso");
+        Document curso = document.get("curso", Document.class);
         if (curso != null) {
             String nomeCurso = curso.getString("nome");
             aluno.setCurso(new Curso(nomeCurso));
         }
+
+        List<Document> habilidadesDocument = document.getList(
+            "habilidades", Document.class, new ArrayList<>()
+        );
+        List<Habilidade> habilidades = new ArrayList<>();
+        for (Document habilidadeDocument : habilidadesDocument) {
+            habilidades.add(
+                new Habilidade(
+                    habilidadeDocument.getString("nome"), habilidadeDocument.getString("nivel")
+                )
+            );
+        }
+        aluno.setHabilidades(habilidades);
 
         return aluno;
     }

@@ -3,7 +3,9 @@ package br.com.alura.escolalura.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.alura.escolalura.models.Aluno;
 import br.com.alura.escolalura.models.Habilidade;
@@ -26,6 +28,16 @@ public class HabilidadeController {
         model.addAttribute("habilidade", new Habilidade());
 
         return "habilidade/nova";
+    }
+
+    @PostMapping("/alunos/{alunoId}/habilidades")
+    public String criar(@PathVariable String alunoId, @ModelAttribute Habilidade habilidade) {
+        Aluno aluno = alunoRepository.encontrarPorId(alunoId);
+        aluno.adicionar(habilidade);
+
+        alunoRepository.salvar(aluno);
+
+        return "redirect:/alunos";
     }
 
 }

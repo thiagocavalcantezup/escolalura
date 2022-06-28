@@ -19,7 +19,7 @@
               th:text="${aluno.nome}"></span> </h3>
       <div class="row">
         <form class="col s12" action="#"
-              th:action="@{'/habilidade/salvar/' + ${aluno.id}}"
+              th:action="@{'/alunos/' + ${aluno.id} + '/habilidades'}"
               th:object="${habilidade}" method="post">
           <div class="section">
             <h5>Habilidades</h5>
