@@ -19,6 +19,7 @@ import org.bson.types.ObjectId;
 import br.com.alura.escolalura.models.Aluno;
 import br.com.alura.escolalura.models.Curso;
 import br.com.alura.escolalura.models.Habilidade;
+import br.com.alura.escolalura.models.Nota;
 
 public class AlunoCodec implements CollectibleCodec<Aluno> {
 
@@ -54,6 +55,7 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
         LocalDate dataNascimento = aluno.getDataNascimento();
         Curso curso = aluno.getCurso();
         List<Habilidade> habilidades = aluno.getHabilidades();
+        List<Nota> notas = aluno.getNotas();
 
         Document document = new Document();
 
@@ -70,6 +72,12 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
             );
         }
         document.put("habilidades", habilidadesDocument);
+
+        List<Double> notasDocument = new ArrayList<>();
+        for (Nota nota : notas) {
+            notasDocument.add(nota.getValor());
+        }
+        document.put("notas", notasDocument);
 
         codec.encode(writer, document, context);
     }
@@ -111,6 +119,13 @@ public class AlunoCodec implements CollectibleCodec<Aluno> {
             );
         }
         aluno.setHabilidades(habilidades);
+
+        List<Double> notasDocument = document.getList("notas", Double.class, new ArrayList<>());
+        List<Nota> notas = new ArrayList<>();
+        for (Double notaDocument : notasDocument) {
+            notas.add(new Nota(notaDocument));
+        }
+        aluno.setNotas(notas);
 
         return aluno;
     }

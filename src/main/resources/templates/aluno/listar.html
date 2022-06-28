@@ -37,10 +37,11 @@
               </a>
               <a th:href="@{'/alunos/' + ${aluno.id} + '/habilidades/nova/'}"
                  title="Cadastrar habilidade">
-                <i class="tiny material-icons ">verified_user </i>
+                <i class="tiny material-icons ">verified_user</i>
               </a>
-              <a th:href="@{'/alunos/#'}" title="Notas">
-                <i class="tiny material-icons ">spellcheck </i>
+              <a th:href="@{'/alunos/' + ${aluno.id} + '/notas/nova/'}"
+                 title="Notas">
+                <i class="tiny material-icons ">spellcheck</i>
               </a>
             </td>
           </tr>

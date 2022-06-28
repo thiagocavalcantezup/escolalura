@@ -73,7 +73,11 @@ public class Aluno {
     }
 
     public void adicionar(Habilidade habilidade) {
-        this.habilidades.add(habilidade);
+        habilidades.add(habilidade);
+    }
+
+    public void adicionar(Nota nota) {
+        notas.add(nota);
     }
 
 }
