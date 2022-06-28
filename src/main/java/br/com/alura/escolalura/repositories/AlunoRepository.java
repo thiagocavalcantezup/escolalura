@@ -27,7 +27,7 @@ public class AlunoRepository {
     private MongoClient mongoClient;
     private MongoDatabase database;
 
-    public void criarConexao() {
+    public void abrirConexao() {
         Codec<Document> codec = MongoClientSettings.getDefaultCodecRegistry().get(Document.class);
         AlunoCodec alunoCodec = new AlunoCodec(codec);
 
@@ -43,8 +43,12 @@ public class AlunoRepository {
         this.database = mongoClient.getDatabase("test");
     }
 
+    private void fecharConexao() {
+        this.mongoClient.close();
+    }
+
     public void salvar(Aluno aluno) {
-        criarConexao();
+        abrirConexao();
 
         MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
 
@@ -56,33 +60,50 @@ public class AlunoRepository {
             );
         }
 
-        this.mongoClient.close();
+        fecharConexao();
     }
 
     public List<Aluno> encontrarTodos() {
-        criarConexao();
+        abrirConexao();
 
         MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
         MongoCursor<Aluno> resultado = alunos.find().iterator();
-        List<Aluno> alunosEncontrados = new ArrayList<>();
+        List<Aluno> alunosEncontrados = criarLista(resultado);
 
-        while (resultado.hasNext()) {
-            Aluno aluno = resultado.next();
-            alunosEncontrados.add(aluno);
-        }
-
-        this.mongoClient.close();
+        fecharConexao();
 
         return alunosEncontrados;
     }
 
+    public List<Aluno> encontrarTodosPorNome(String nome) {
+        abrirConexao();
+
+        MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
+        MongoCursor<Aluno> resultado = alunos.find(Filters.eq("nome", nome)).iterator();
+        List<Aluno> alunosEncontrados = criarLista(resultado);
+
+        fecharConexao();
+
+        return alunosEncontrados;
+    }
+
+    private List<Aluno> criarLista(MongoCursor<Aluno> resultado) {
+        List<Aluno> lista = new ArrayList<>();
+
+        while (resultado.hasNext()) {
+            lista.add(resultado.next());
+        }
+
+        return lista;
+    }
+
     public Aluno encontrarPorId(String id) {
-        criarConexao();
+        abrirConexao();
 
         MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
         Aluno aluno = alunos.find(Filters.eq("_id", new ObjectId(id))).first();
 
-        this.mongoClient.close();
+        fecharConexao();
 
         return aluno;
     }
