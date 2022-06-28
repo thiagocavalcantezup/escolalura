@@ -15,13 +15,30 @@
 
   <body class="grey lighten-3">
     <div id="pesquisaAluno" class="container">
-      <h3 class="main-title center">Pesquisar Aluno</h3>
-      <form class="col s12" action="/alunos/pesquisar-nome" method="get">
+      <h3 class="main-title center">Pesquisar Alunos por Classificação</h3>
+      <form class="col s12" action="/alunos/pesquisar-nota" method="get">
         <div class="row">
           <div class="row">
             <div class="input-field col s12">
-              <input id="nome" name="nome" type="text" /> <label
-                     for="first_name">Nome</label>
+              <select name="classificacao" id="classificacao">
+                <option value="" disabled="disabled" selected="selected">
+                  Escolha aqui</option>
+                <option value="APROVADO">Aprovado</option>
+                <option value="REPROVADO">Reprovado</option>
+              </select>
+              <label>Classificação</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <select name="notaDeCorte" id="notaDeCorte">
+                <option value="" disabled="disabled" selected="selected">
+                  Escolha aqui</option>
+                <option value="7">7</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+              </select>
+              <label>Nota de Corte</label>
             </div>
           </div>
           <div class="row">
@@ -58,6 +75,11 @@
     </div>
     <script type="text/javascript"
             th:src="@{/materialize/js/materialize.min.js}"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('select').formSelect();
+      });
+    </script>
   </body>
 
 </html>

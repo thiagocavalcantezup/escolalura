@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.alura.escolalura.models.Aluno;
+import br.com.alura.escolalura.models.ClassificacaoAluno;
 import br.com.alura.escolalura.repositories.AlunoRepository;
 
 @Controller
@@ -45,14 +46,27 @@ public class AlunoController {
     }
 
     @GetMapping("/alunos/pesquisar-nome")
-    public String pesquisarNome() {
+    public String pesquisarNome(@RequestParam(required = false) String nome, Model model) {
+        if (nome != null) {
+            model.addAttribute("alunos", alunoRepository.encontrarTodosPorNome(nome));
+        }
+
         return "aluno/pesquisar-nome";
     }
 
-    @GetMapping("/alunos/pesquisar")
-    public String pesquisar(@RequestParam String nome, Model model) {
-        model.addAttribute("alunos", alunoRepository.encontrarTodosPorNome(nome));
-        return "aluno/pesquisar-nome";
+    @GetMapping("/alunos/pesquisar-nota")
+    public String pesquisarNota(@RequestParam(required = false) ClassificacaoAluno classificacao,
+                                @RequestParam(required = false) Double notaDeCorte, Model model) {
+        if (classificacao != null && notaDeCorte != null) {
+            model.addAttribute(
+                "alunos",
+                alunoRepository.encontrarTodosPorClassificacaoNotaDeCorte(
+                    classificacao, notaDeCorte
+                )
+            );
+        }
+
+        return "aluno/pesquisar-nota";
     }
 
 }

@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,7 @@ import com.mongodb.client.model.Filters;
 
 import br.com.alura.escolalura.codecs.AlunoCodec;
 import br.com.alura.escolalura.models.Aluno;
+import br.com.alura.escolalura.models.ClassificacaoAluno;
 
 @Repository
 public class AlunoRepository {
@@ -80,6 +82,27 @@ public class AlunoRepository {
 
         MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
         MongoCursor<Aluno> resultado = alunos.find(Filters.eq("nome", nome)).iterator();
+        List<Aluno> alunosEncontrados = criarLista(resultado);
+
+        fecharConexao();
+
+        return alunosEncontrados;
+    }
+
+    public List<Aluno> encontrarTodosPorClassificacaoNotaDeCorte(ClassificacaoAluno classificacao,
+                                                                 Double notaDeCorte) {
+        abrirConexao();
+
+        MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
+        Bson filter;
+
+        if (classificacao.equals(ClassificacaoAluno.REPROVADO)) {
+            filter = Filters.lt("notas", notaDeCorte);
+        } else {
+            filter = Filters.gte("notas", notaDeCorte);
+        }
+
+        MongoCursor<Aluno> resultado = alunos.find(filter).iterator();
         List<Aluno> alunosEncontrados = criarLista(resultado);
 
         fecharConexao();
