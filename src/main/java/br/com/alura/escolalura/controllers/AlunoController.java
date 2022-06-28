@@ -88,8 +88,16 @@ public class AlunoController {
     }
 
     @GetMapping("/alunos/pesquisar-geolocalizacao")
-    public String pesquisarGeolocalizacao(Model model) {
-        model.addAttribute("alunosProximos", new ArrayList<>());
+    public String pesquisarGeolocalizacao(@RequestParam(required = false) String alunoId,
+                                          Model model) {
+        if (alunoId != null) {
+            Aluno aluno = alunoRepository.encontrarPorId(alunoId);
+            List<Aluno> alunosProximos = alunoRepository.encontrarPorGeolocalizacao(aluno);
+            model.addAttribute("alunosProximos", alunosProximos);
+        }
+
+        model.addAttribute("alunos", alunoRepository.encontrarTodos());
+
         return "aluno/pesquisar-geolocalizacao";
     }
 

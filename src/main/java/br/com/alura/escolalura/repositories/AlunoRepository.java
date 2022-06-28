@@ -18,6 +18,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.geojson.Point;
+import com.mongodb.client.model.geojson.Position;
 
 import br.com.alura.escolalura.codecs.AlunoCodec;
 import br.com.alura.escolalura.models.Aluno;
@@ -103,6 +106,27 @@ public class AlunoRepository {
         }
 
         MongoCursor<Aluno> resultado = alunos.find(filter).iterator();
+        List<Aluno> alunosEncontrados = criarLista(resultado);
+
+        fecharConexao();
+
+        return alunosEncontrados;
+    }
+
+    public List<Aluno> encontrarPorGeolocalizacao(Aluno aluno) {
+        abrirConexao();
+
+        MongoCollection<Aluno> alunos = this.database.getCollection("alunos", Aluno.class);
+
+        alunos.createIndex(Indexes.geo2dsphere("contato"));
+
+        List<Double> coordinates = aluno.getContato().getCoordinates();
+        Point pontoReferencia = new Point(new Position(coordinates));
+
+        MongoCursor<Aluno> resultado = alunos.find(
+            Filters.nearSphere("contato", pontoReferencia, 2000.0, 0.0)
+        ).limit(2).skip(1).iterator();
+
         List<Aluno> alunosEncontrados = criarLista(resultado);
 
         fecharConexao();

@@ -57,7 +57,8 @@
   <body class="grey lighten-3">
     <div id="formularioGeolocalizacao" class="container">
       <h3 class="main-title center">Visualizar Aluno</h3>
-      <form class="col s12" action="/geolocalizacao/pesquisar" method="get">
+      <form class="col s12" action="/alunos/pesquisar-geolocalizacao"
+            method="get">
         <div class="row">
           <div class="input-field col s12">
             <select name="alunoId" id="alunoId">
@@ -78,7 +79,8 @@
           </div>
         </div>
       </form>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOdplkllfJTzoC37shReWBSDW3xKKR8UI&amp;callback=initMap&amp;libraries=places,geometry&amp;solution_channel=GMP_QB_locatorplus_v6_cA"
+      <script th:if="${alunosProximos} != null"
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOdplkllfJTzoC37shReWBSDW3xKKR8UI&amp;callback=initMap&amp;libraries=places,geometry&amp;solution_channel=GMP_QB_locatorplus_v6_cA"
               async="async" defer="defer"></script>
 
       <script type="text/javascript">
